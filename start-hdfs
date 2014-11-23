@@ -1,0 +1,14 @@
+#!/bin/bash
+
+/etc/init.d/rpcbind start
+
+if [ ! -d /tmp/hadoop-hdfs/dfs/name ]; then
+    su -c "hdfs namenode -format" hdfs
+fi
+
+for i in hadoop-hdfs-{namenode,secondarynamenode,datanode,nfs3}; do
+    /etc/init.d/$i start
+done
+
+tail -f /var/log/hadoop-hdfs/hadoop-*.log
+
